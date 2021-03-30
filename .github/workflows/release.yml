@@ -1,0 +1,43 @@
+# This workflow will create a release for Voyager
+on:
+  push:
+    tags:
+      - 'v*'
+
+name: Create Release
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Prepare Assets
+        run: |
+          mkdir git-log
+          mkdir git-log/results
+          cp instrument.yml git-log/instrument.yml
+          cp README.md git-log/README.md
+      - name: Create Archive
+        run: zip -r git-log.zip git-log
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../git-log.zip
+          asset_name: git-log.zip
+          asset_content_type: application/zip
