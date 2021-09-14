@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir git-log
           mkdir git-log/results
-          cp target/anonymizeGit.jar git-log/anonymizeGit.jar
+          cp target/incognito.jar git-log/incognito.jar
           cp instrument.yml git-log/instrument.yml
           cp README.md git-log/README.md
       - name: Create Archive

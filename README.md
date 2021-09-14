@@ -1,1 +1,1 @@
-# voyager-git-log-instrument
+# Voyager instrument for Git Log
