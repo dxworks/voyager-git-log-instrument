@@ -1,4 +1,4 @@
-package org.dxworks.utils.anonymizegit;
+package org.dxworks.utils.incognito;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class AnonymizeGit {
+public class IncognitoOld {
     private static File createResultFolder(String resultFolderName) throws IOException {
         File directory = new File(resultFolderName);
         if (directory.exists()) Files.walk(directory.toPath()).map(Path::toFile).forEach(File::delete);
@@ -132,7 +132,7 @@ public class AnonymizeGit {
     public static void main(String[] args) {
         if (args.length < 1) {
             System.err.println("No input folder provided");
-            System.err.println("You must put all Git log files in the folder provided as parameter!");
+            System.err.println("You must put a Git log file as parameter!");
             System.exit(-1);
         }
 
