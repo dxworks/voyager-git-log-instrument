@@ -34,7 +34,7 @@ fun encrypt(car: Char): Char {
 }
 
 private fun encryptLine(name: String): String =
-    name.toCharArray().map { encrypt(it) }.toString()
+    name.toCharArray().map { encrypt(it) }.joinToString("")
 
 
 private fun processLogfile(logFile: File, charset: Charset = Charsets.UTF_8) {
@@ -49,7 +49,7 @@ private fun processLogfile(logFile: File, charset: Charset = Charsets.UTF_8) {
                     } ?: emailRegex.find(it)?.let { match ->
                         match.groupValues[1] + encryptLine(match.groupValues[2]) + match.groupValues[3]
                     } ?: it
-                }.forEach { writer.write(it) }
+                }.forEach { writer.write("$it\n") }
             }
         }
     } catch (e: MalformedInputException) {
@@ -57,13 +57,13 @@ private fun processLogfile(logFile: File, charset: Charset = Charsets.UTF_8) {
             processLogfile(logFile, StandardCharsets.ISO_8859_1)
     }
 
-    incognitoFile.copyTo(logFile)
+    incognitoFile.copyTo(logFile, true)
     incognitoFile.delete()
 }
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
-        System.err.println("No input folder provided")
+        System.err.println("No log file provided")
         System.err.println("You must put a Git log file as parameter!")
         exitProcess(-1)
     }
