@@ -10,7 +10,7 @@ commands:
     unix: git log --encoding=UTF-8 --no-merges --find-renames --numstat --raw --format="commit:%H%nauthor:%an%nemail:%ae%ndate:%cD%nmessage:%n%s%n%b%nnumstat:" > "${instrument}/results/${repoName}.git"
     dir: ${repo}
   - name: run incognito
-    win: ${runIncognito} && echo 1 || echo did not run incognito due to parameter settings
+    win: ${runIncognito} && java -jar anonymizeGit.jar results || echo did not run incognito due to parameter settings
     unix: ${runIncognito} && java -jar anonymizeGit.jar results || echo did not run incognito due to parameter settings
     dir: "${instrument}"
 
