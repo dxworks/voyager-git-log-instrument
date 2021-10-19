@@ -33,7 +33,7 @@ fun encrypt(car: Char): Char {
     else car
 }
 
-private fun encryptLine(name: String): String =
+private fun encryptString(name: String): String =
     name.toCharArray().map { encrypt(it) }.joinToString("")
 
 
@@ -45,9 +45,9 @@ private fun processLogfile(logFile: File, charset: Charset = Charsets.UTF_8) {
             incognitoFile.bufferedWriter().use { writer ->
                 lines.map {
                     authorRegex.find(it)?.let { match ->
-                        match.groupValues[1] + encryptLine(match.groupValues[2])
+                        match.groupValues[1] + encryptString(match.groupValues[2])
                     } ?: emailRegex.find(it)?.let { match ->
-                        match.groupValues[1] + encryptLine(match.groupValues[2]) + match.groupValues[3]
+                        match.groupValues[1] + encryptString(match.groupValues[2]) + match.groupValues[3]
                     } ?: it
                 }.forEach { writer.write("$it\n") }
             }

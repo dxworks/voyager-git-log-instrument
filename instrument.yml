@@ -10,8 +10,6 @@ commands:
     unix: git log --encoding=UTF-8 --no-merges --find-renames --numstat --raw --format="commit:%H%nauthor:%an%nemail:%ae%ndate:%cD%nmessage:%n%s%n%b%nnumstat:" > "${instrument}/results/${repoName}.git"
     dir: ${repo}
   - name: run incognito
-    win: if ${runIncognito}==true (java -jar incognito.jar "${instrument}/results/${repoName}.git") else (echo did not run incognito due to parameter settings)
-    unix: ${runIncognito} && java -jar incognito.jar "${instrument}/results/${repoName}.git" || echo did not run incognito due to parameter settings
+    win: if %GIT_INGONITO%==true (java -jar incognito.jar "${instrument}/results/${repoName}.git") else (echo did not run incognito due to parameter settings)
+    unix: if [[ "$GIT_INCOGNITO" == "true" ]]; java -jar incognito.jar "${instrument}/results/${repoName}.git"; else echo did not run incognito due to parameter settings; fi
 
-parameters:
-  runIncognito: false
