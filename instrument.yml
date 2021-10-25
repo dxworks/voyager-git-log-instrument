@@ -11,5 +11,5 @@ commands:
     dir: ${repo}
   - name: run incognito
     win: if %GIT_INCOGNITO%==true (java -jar incognito.jar "${instrument}/results/${repoName}.git") else (echo did not run incognito due to parameter settings)
-    unix: if [[ "$GIT_INCOGNITO" == "true" ]]; java -jar incognito.jar "${instrument}/results/${repoName}.git"; else echo did not run incognito due to parameter settings; fi
+    unix: if [[ "$GIT_INCOGNITO" == "true" ]]; then java -jar incognito.jar "${instrument}/results/${repoName}.git"; else echo did not run incognito due to parameter settings; fi
 
