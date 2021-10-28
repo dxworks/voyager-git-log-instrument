@@ -9,32 +9,15 @@ import kotlin.system.exitProcess
 
 val authorRegex = Regex("(author:)(.*)")
 val emailRegex = Regex("(email:)(.*)(@.*)")
-
-const val consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
-const val vowels = "aeiouAEIOU"
-
-fun encrypt(car: Char): Char {
-
-    if (car == 'u') return 'a'
-    if (car == 'U') return 'A'
-    if (car == 'z') return 'b'
-    if (car == 'Z') return 'B'
-
-    var indexOfCar: Int = consonants.indexOf(car)
-
-    if (indexOfCar == consonants.length - 1) return consonants[0]
-
-    if (indexOfCar >= 0) return consonants[indexOfCar + 1]
-
-    indexOfCar = vowels.indexOf(car)
-    if (indexOfCar == vowels.length - 1) return vowels[0]
-
-    return if (indexOfCar >= 0) vowels[indexOfCar + 1]
-    else car
-}
+const val CHAR_MAP_ENV_VARIABLE = "INCOGNITO_CHARMAP_FILE"
+val charmapFilePath: String? = System.getenv(CHAR_MAP_ENV_VARIABLE)
+var charTransformer: CharTransformer =
+    if (charmapFilePath != null && File(charmapFilePath).exists())
+        CharTransformer(charmapFilePath)
+    else CharTransformer()
 
 private fun encryptString(name: String): String =
-    name.toCharArray().map { encrypt(it) }.joinToString("")
+    name.toCharArray().map { charTransformer.mapChar(it) }.joinToString("")
 
 
 private fun processLogfile(logFile: File, charset: Charset = Charsets.UTF_8) {
@@ -64,7 +47,7 @@ private fun processLogfile(logFile: File, charset: Charset = Charsets.UTF_8) {
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
         System.err.println("No log file provided")
-        System.err.println("You must put a Git log file as parameter!")
+        System.err.println("You must provide a Git log file as parameter!")
         exitProcess(-1)
     }
     val fileToProcess = args[0]
